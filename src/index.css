@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  
+  body {
+    background-color: #111215;
+    color: #F4F4F6;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+    letter-spacing: -0.015em;
+  }
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace !important;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono), monospace;
+}
+
+/* Solid Executive Panel Styling (No AI-template glass blurs or neon glow overlays) */
+.card-solid {
+  background-color: #18191E;
+  border: 1px solid #27272A;
+  border-radius: 1rem;
+}
+
+.card-solid-hover {
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card-solid-hover:hover {
+  border-color: #3F3F46;
+}
+
+.input-solid {
+  background-color: #141519;
+  border: 1px solid #27272A;
+  color: #F4F4F6;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-solid:focus {
+  outline: none;
+  border-color: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+/* Custom Sleek Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: #27272A;
+  height: 6px;
+  border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #10B981;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Simple Breathing Pulse */
+@keyframes breatheSimple {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.animate-breathe-simple {
+  animation: breatheSimple 19s ease-in-out infinite;
+}
+
+/* Minimal Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111215;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
