@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShieldCheck, Flame, Settings } from 'lucide-react';
+import { ShieldCheck, Flame, Settings, Download } from 'lucide-react';
 
-export default function Navbar({ daysSmokeFree, onOpenCravingKit, onOpenSettings }) {
+export default function Navbar({ daysSmokeFree, onOpenCravingKit, onOpenSettings, onOpenInstallPwa }) {
   return (
     <header className="sticky top-0 z-40 bg-[#18191E] border-b border-[#27272A] px-4 sm:px-8 py-3.5 font-sans">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -24,6 +24,16 @@ export default function Navbar({ daysSmokeFree, onOpenCravingKit, onOpenSettings
 
         {/* Action Controls & Emergency Red Craving Button */}
         <div className="flex items-center gap-2.5">
+          {/* Install PWA App Button */}
+          <button
+            onClick={onOpenInstallPwa}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 text-[#10B981] font-bold text-xs transition-all active:scale-95"
+            title="How to install PWA on iOS, Android & Desktop"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Install App</span>
+          </button>
+
           {/* Streak pill */}
           <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141519] border border-[#27272A] text-xs font-semibold text-[#F4F4F6] font-mono">
             <Flame className="w-3.5 h-3.5 text-amber-400" />

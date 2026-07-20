@@ -7,10 +7,11 @@ import HealthTimeline from './components/HealthTimeline';
 import MilestonesBadges from './components/MilestonesBadges';
 import CravingKit from './components/CravingKit';
 import SettingsModal from './components/SettingsModal';
+import InstallPwaModal from './components/InstallPwaModal';
 import PrivacyBadge from './components/PrivacyBadge';
 import { getStoredConfig, saveStoredConfig, clearAllData } from './utils/storage';
 import { calculateStats } from './utils/calc';
-import { HeartPulse, Trophy, Activity, RefreshCw } from 'lucide-react';
+import { HeartPulse, Trophy, Activity, RefreshCw, Smartphone, Download } from 'lucide-react';
 
 export default function App() {
   const [config, setConfig] = useState(() => getStoredConfig());
@@ -19,6 +20,28 @@ export default function App() {
 
   const [isCravingKitOpen, setIsCravingKitOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isInstallPwaOpen, setIsInstallPwaOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  // Listen for native PWA install prompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+  }, []);
+
+  const handleTriggerInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+      setIsInstallPwaOpen(false);
+    }
+  };
 
   // Tick timer every second for continuous live calculation
   useEffect(() => {
@@ -60,6 +83,7 @@ export default function App() {
         daysSmokeFree={stats.days}
         onOpenCravingKit={() => setIsCravingKitOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenInstallPwa={() => setIsInstallPwaOpen(true)}
       />
 
       {/* Main Content Container */}
@@ -137,10 +161,18 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-6 px-4 text-center text-xs text-[#9CA3AF]">
+      <footer className="border-t border-slate-800/60 py-6 px-4 text-center text-xs text-[#9CA3AF] space-y-2">
         <p className="max-w-xl mx-auto">
           <span className="font-semibold text-[#F3F4F6]">quit.habitz</span> — Privacy-First Quit Smoking Tracker. Medical benchmarks sourced from World Health Organization (WHO).
         </p>
+        <div>
+          <button
+            onClick={() => setIsInstallPwaOpen(true)}
+            className="inline-flex items-center gap-1.5 text-[#10B981] hover:underline font-semibold"
+          >
+            <Download className="w-3.5 h-3.5" /> How to install quit.habitz on iOS, Android & Desktop
+          </button>
+        </div>
       </footer>
 
       {/* Modals & Overlays */}
@@ -156,6 +188,12 @@ export default function App() {
         config={config}
         onUpdateConfig={handleUpdateConfig}
         onResetAll={handleResetAll}
+      />
+      <InstallPwaModal
+        isOpen={isInstallPwaOpen}
+        onClose={() => setIsInstallPwaOpen(false)}
+        deferredPrompt={deferredPrompt}
+        onTriggerInstall={handleTriggerInstall}
       />
     </div>
   );
